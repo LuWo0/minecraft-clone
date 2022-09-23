@@ -1,2 +1,2 @@
 # minecraft-clone
-Building a minecraft clone using react, javascript and three.js
+Building a MineCraft clone using react, javascript and three.js
