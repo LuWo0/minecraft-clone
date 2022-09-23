@@ -25,7 +25,6 @@ groundTexture.magFilter = NearestFilter;
 
 groundTexture.wrapS = RepeatWrapping;
 groundTexture.wrapT = RepeatWrapping;
-groundTexture.repeat.set(100, 100);
 
 export {
     dirtTexture,
