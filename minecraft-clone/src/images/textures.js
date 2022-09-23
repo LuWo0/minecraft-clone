@@ -7,12 +7,13 @@ import {
     glassImg
 } from "./images"
 
-const dirtTexture = new TextureLoader(dirtImg);
-const logTexture = new TextureLoader(logImg);
-const grassTexture = new TextureLoader(grassImg);
-const woodTexture = new TextureLoader(woodImg);
-const glassTexture = new TextureLoader(glassImg);
-const groundTexture = new TextureLoader(grassImg);
+// Instantiating the textures and loading for each image
+const dirtTexture = new TextureLoader().load(dirtImg);
+const logTexture = new TextureLoader().load(logImg);
+const grassTexture = new TextureLoader().load(grassImg);
+const woodTexture = new TextureLoader().load(woodImg);
+const glassTexture = new TextureLoader().load(glassImg);
+const groundTexture = new TextureLoader().load(grassImg);
 
 export {
     dirtTexture,
