@@ -1,4 +1,4 @@
-import { TextureLoader } from "three"
+import { NearestFilter, TextureLoader, RepeatWrapping } from "three"
 import {
     dirtImg,
     logImg,
@@ -14,6 +14,18 @@ const grassTexture = new TextureLoader().load(grassImg);
 const woodTexture = new TextureLoader().load(woodImg);
 const glassTexture = new TextureLoader().load(glassImg);
 const groundTexture = new TextureLoader().load(grassImg);
+
+// Making the textures look more pixelated, prevents smearing
+dirtTexture.magFilter = NearestFilter;
+logTexture.magFilter = NearestFilter;
+grassTexture.magFilter = NearestFilter;
+woodTexture.magFilter = NearestFilter;
+glassTexture.magFilter = NearestFilter;
+groundTexture.magFilter = NearestFilter;
+
+groundTexture.wrapS = RepeatWrapping;
+groundTexture.wrapT = RepeatWrapping;
+groundTexture.repeat.set(100, 100);
 
 export {
     dirtTexture,

@@ -8,11 +8,6 @@ export const Ground = () => {
         position: [0, 0, 0],
     }));
 
-    // prevent smearing of the image
-    groundTexture.magFilter = NearestFilter;
-    // To prevent images from stretching
-    groundTexture.wrapS = RepeatWrapping;
-    groundTexture.wrapT = RepeatWrapping;
     groundTexture.repeat.set(100, 100);
 
     return (
