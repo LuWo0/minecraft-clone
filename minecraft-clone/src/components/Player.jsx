@@ -9,8 +9,7 @@ const SPEED = 4;
 
 export const Player = () => {
     const {moveBackward, moveForward, moveLeft, moveRight, jump} = useKeyBoard();
-    // console.log('actions', Object.entries(actions).filter(([ket, val]) => val));
-
+    
     const { camera } = useThree();
 
     const [ref, api] = useSphere(() => ({
@@ -51,18 +50,19 @@ export const Player = () => {
             0,
             0,
         );
+        
+        
+        direction
+        .subVectors(frontVector, sideVector)
+        .normalize()
+        .multiplyScalar(SPEED)
+        .applyEuler(camera.rotation);
+        
+        api.velocity.set(direction.x, vel.current[1], direction.z);
 
-        if (jump && Math.abs(vel.current[1] < 0.05)){
+        if (jump && Math.abs(vel.current[1]) < 0.05){
             api.velocity.set(vel.current[0], JUMP_FORCE, vel.current[2]);
         }
-
-        direction
-            .subVectors(frontVector, sideVector)
-            .normalize()
-            .multiplyScalar(SPEED)
-            .applyEuler(camera.rotation);
-
-        api.velocity.set(direction.x, vel.current[1], direction.z);
     })
 
     return (
