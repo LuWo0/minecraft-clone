@@ -4,9 +4,12 @@ import { useEffect, useRef } from "react";
 import { Vector3 } from "three";
 import { useKeyBoard } from "../hooks/useKeyboard";
 
+const JUMP_FORCE = 3;
+const SPEED = 4;
+
 export const Player = () => {
-    const actions = useKeyBoard();
-    console.log('actions', Object.entries(actions).filter(([ket, val]) => val));
+    const {moveBackward, moveForward, moveLeft, moveRight, jump} = useKeyBoard();
+    // console.log('actions', Object.entries(actions).filter(([ket, val]) => val));
 
     const { camera } = useThree();
 
@@ -17,9 +20,9 @@ export const Player = () => {
     }))
 
     // setting up a reference to the velocity that subscribes to the velocity of the sphere
-    const velocity = useRef([0,0,0]);
+    const vel = useRef([0,0,0]);
     useEffect(()=> {
-        api.velocity.subscribe((vel) => velocity.current = vel );
+        api.velocity.subscribe((v) => vel.current = v );
     }, [api.velocity]);
 
     // Setting the player to some coordinates of the sphere 
@@ -34,7 +37,32 @@ export const Player = () => {
     useFrame(() => {
         camera.position.copy(new Vector3(position.current[0], position.current[1], position.current[2]));
 
-        api.velocity.set(0, 0, 0);
+        const direction = new Vector3( 
+        );
+
+        const frontVector = new Vector3(
+            0,
+            0,
+            (moveBackward ? 1 : 0) - (moveForward ? 1 : 0) // when both w and s are pressed together, they cancel each other out
+        );
+
+        const sideVector = new Vector3(
+            (moveLeft ? 1 : 0) - (moveRight ? 1 : 0), // when both a and d are pressed together, they cancel each other out
+            0,
+            0,
+        );
+
+        if (jump && Math.abs(vel.current[1] < 0.05)){
+            api.velocity.set(vel.current[0], JUMP_FORCE, vel.current[2]);
+        }
+
+        direction
+            .subVectors(frontVector, sideVector)
+            .normalize()
+            .multiplyScalar(SPEED)
+            .applyEuler(camera.rotation);
+
+        api.velocity.set(direction.x, vel.current[1], direction.z);
     })
 
     return (
