@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useKeyboard } from "../hooks/useKeyboard";
 import { useStore } from "../hooks/useStore";
-import { dirtImg, grassImg, glassImg, woodImg, logImg } from "../images/images";
+import { dirtImg, grassImg, glassImg, woodImg, logImg } from "../public/images/images";
 
 const images = {
     dirt: dirtImg,

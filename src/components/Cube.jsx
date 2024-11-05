@@ -1,7 +1,8 @@
 import { useBox } from "@react-three/cannon";
-import * as textures from "../images/textures";
+import * as textures from "../public/images/textures";
 import { useStore } from "../hooks/useStore";
 import { useState } from "react";
+import { useSound } from "../hooks/useSound";
 
 export const Cube = ({position, texture}) => {
 
@@ -11,10 +12,44 @@ export const Cube = ({position, texture}) => {
         position
     }));
 
+    const { playSound } = useSound();
     const addCube = useStore((state) => state.addCube);
     const removeCube = useStore((state) => state.removeCube);
+    const activeTexture = useStore((state) => state.texture);
 
-    const activeTexture = textures[texture + "Texture"];
+    const handleCubeClick = (event) => {
+        event.stopPropagation();
+        const clickedFace = Math.floor(event.faceIndex / 2);
+        const {x, y, z} = ref.current.position;
+        
+        if (event.altKey) {
+            removeCube(x, y, z);
+            return;
+        }
+
+        // Play sound based on the active texture being placed
+        const soundName = `${activeTexture}Place`;
+
+        if (clickedFace === 0) {
+            addCube(x + 1, y, z);
+            playSound(soundName);
+        } else if (clickedFace === 1) {
+            addCube(x - 1, y, z);
+            playSound(soundName);
+        } else if (clickedFace === 2) {
+            addCube(x, y + 1, z);
+            playSound(soundName);
+        } else if (clickedFace === 3) {
+            addCube(x, y - 1, z);
+            playSound(soundName);
+        } else if (clickedFace === 4) {
+            addCube(x, y, z + 1);
+            playSound(soundName);
+        } else if (clickedFace === 5) {
+            addCube(x, y, z - 1);
+            playSound(soundName);
+        }
+    };
 
     return (
         <mesh 
@@ -27,45 +62,14 @@ export const Cube = ({position, texture}) => {
                 setIsHovered(false);
             }}
             onClick={(event => {
-                event.stopPropagation();
-                const clickedCubeFace = Math.floor(event.faceIndex / 2) // turns 12 sides cubes into 6 sided cubes
-                const {x, y, z} = ref.current.position;
-                
-                if (event.altKey){
-                    removeCube(x, y, z);
-                    return;
-                }
-                else if (clickedCubeFace === 0){
-                    addCube(x + 1, y, z);
-                    return;
-                }
-                else if (clickedCubeFace === 1){
-                    addCube (x - 1, y, z);
-                    return;
-                }
-                else if (clickedCubeFace === 2){
-                    addCube (x, y + 1, z);
-                    return;
-                }
-                else if (clickedCubeFace === 3){
-                    addCube (x, y - 1, z);
-                    return;
-                }
-                else if (clickedCubeFace === 4){
-                    addCube (x, y, z + 1);
-                    return;
-                }
-                else if (clickedCubeFace === 5){
-                    addCube (x, y, z - 1);
-                    return;
-                }
+                handleCubeClick(event);
             })}
             ref={ref}
         >
             <boxGeometry attach="geometry"/>
             <meshStandardMaterial 
                 color= {isHovered ? "grey" : "white" }
-                map={activeTexture}  
+                map={textures[texture + "Texture"]}  
                 transparent={true}
                 opacity={texture === "glass" ? 0.8 : 1}
                 attach="material"

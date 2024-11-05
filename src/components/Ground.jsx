@@ -1,6 +1,7 @@
 import { usePlane } from "@react-three/cannon";
-import { groundTexture } from "../images/textures";
+import { groundTexture } from "../public/images/textures";
 import { useStore } from "../hooks/useStore";
+import { useSound } from "../hooks/useSound";
 
 
 export const Ground = () => {
@@ -10,6 +11,7 @@ export const Ground = () => {
     }));
 
     const addCube = useStore((state) => state.addCube);
+    const { playSound } = useSound();
 
     groundTexture.repeat.set(100, 100);
 
@@ -19,6 +21,8 @@ export const Ground = () => {
             event.stopPropagation();
             const [x, y, z] = Object.values(event.point).map(value => Math.ceil(value));
             addCube(x, y, z);
+            const currentTexture = useStore.getState().texture;
+            playSound(`${currentTexture}Place`);
         }}
         ref={ref}>
             <planeGeometry attach="geometry" args={[100, 100]}/>
