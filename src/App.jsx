@@ -6,7 +6,9 @@ import { Player } from "./components/Player";
 import { FirstPersonView } from "./components/FirstPersonView";
 import { Cubes } from "./components/Cubes";
 import { PlayerUI } from "./components/PlayerUI";
-         
+import { Crosshair } from "./components/Crosshair";
+import { Menu } from "./components/Menu";
+
 function App() {
   return (
     <>
@@ -20,7 +22,10 @@ function App() {
           <Ground />
         </Physics>
       </Canvas>
+      
+      <Crosshair />
       <PlayerUI />
+      <Menu />
     </>
   )
 }
