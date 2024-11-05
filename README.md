@@ -2,7 +2,7 @@
 
 A voxel-based building game created with React, Three.js, and JavaScript. Build and explore in a 3D world with familiar Minecraft-like mechanics.
 
-![Game Screenshot](screenshot.png) <!-- You might want to add a screenshot of your game -->
+![Game Screenshot](./src/public/images/screenshot.png) <!-- You might want to add a screenshot of your game -->
 
 ## Features
 
