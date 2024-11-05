@@ -35,18 +35,21 @@ export const useStore = create((set) => ({
     }));
   },
   saveWorld: () => {
-    const state = useStore.getState()
-    localStorage.setItem('minecraft-world', JSON.stringify(state.cubes))
+    set((prev) => {
+      setLocalStorage("cubes", prev.cubes);
+      return prev;
+    });
   },
   loadWorld: () => {
-    const saved = localStorage.getItem('minecraft-world')
+    const saved = getLocalStorage("cubes");
     if (saved) {
-      set({ cubes: JSON.parse(saved) })
+      set(() => ({ cubes: saved }));
     }
   },
   resetWorld: () => {
-    set(() => ({
-      cubes: [],
-    }));
+    set(() => {
+      setLocalStorage("cubes", []);
+      return { cubes: [] };
+    });
   },
 }));
