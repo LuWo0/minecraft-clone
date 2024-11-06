@@ -318,13 +318,20 @@ body {
 
 /* Checkbox styles */
 .setting-item.checkbox {
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .setting-item.checkbox input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
+}
+
+.setting-item.checkbox label {
+    cursor: pointer;
+    user-select: none;
 }
 
 /* Save Confirmation */
@@ -577,4 +584,77 @@ body {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Controls tab styles */
+.controls-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.control-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.control-category {
+    color: #4CAF50;
+    font-size: 1.1rem;
+    margin: 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3a3a3a;
+}
+
+.control-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.control-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #e1e1e1;
+    font-size: 0.9rem;
+}
+
+.key-binding {
+    background-color: #1a1a1a;
+    border: 1px solid #4a4a4a;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    min-width: 40px;
+    text-align: center;
+    font-family: monospace;
+    font-size: 0.9rem;
+    color: #fff;
+    box-shadow: 0 2px 0 #000;
+}
+
+.key-description {
+    flex: 1;
+}
+
+/* Scrollbar styles for controls container */
+.controls-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.controls-container::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 4px;
+}
+
+.controls-container::-webkit-scrollbar-thumb {
+    background: #3a3a3a;
+    border-radius: 4px;
+}
+
+.controls-container::-webkit-scrollbar-thumb:hover {
+    background: #4a4a4a;
 }
