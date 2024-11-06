@@ -5,6 +5,8 @@ import { useSound } from '../hooks/useSound';
 export const Menu = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('main');
+    const [notification, setNotification] = useState({ show: false, message: '', type: '' });
+    const [isSaving, setIsSaving] = useState(false);
     const saveWorld = useStore((state) => state.saveWorld);
     const resetWorld = useStore((state) => state.resetWorld);
     const { 
@@ -52,17 +54,36 @@ export const Menu = () => {
         };
     }, [isOpen]);
 
+    const showNotification = (message, type = 'success') => {
+        setNotification({ show: true, message, type });
+        setTimeout(() => {
+            setNotification({ show: false, message: '', type: '' });
+        }, 3000);
+    };
+
     const handleReset = () => {
         if (window.confirm('Are you sure you want to reset the world? This cannot be undone.')) {
-            resetWorld();
-            handleClose();
+            try {
+                resetWorld();
+                handleClose();
+                showNotification('World has been reset successfully', 'warning');
+            } catch (error) {
+                showNotification('Failed to reset world', 'error');
+            }
         }
     };
 
-    const handleSave = () => {
-        saveWorld();
-        handleClose();
-        showSaveConfirmation();
+    const handleSave = async () => {
+        setIsSaving(true);
+        try {
+            await saveWorld();
+            showNotification('World saved successfully', 'success');
+        } catch (error) {
+            showNotification('Failed to save world', 'error');
+        } finally {
+            setIsSaving(false);
+            handleClose();
+        }
     };
 
     const handleClose = () => {
@@ -73,14 +94,6 @@ export const Menu = () => {
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
-    };
-
-    const showSaveConfirmation = () => {
-        const saveConfirm = document.getElementById('save-confirmation');
-        saveConfirm.classList.add('show');
-        setTimeout(() => {
-            saveConfirm.classList.remove('show');
-        }, 2000);
     };
 
     // Prevent pointer lock when clicking menu elements
@@ -112,8 +125,19 @@ export const Menu = () => {
 
                         {activeTab === 'main' && (
                             <div className="menu-buttons">
-                                <button className="menu-button" onClick={handleSave}>
-                                    Save World
+                                <button 
+                                    className="menu-button" 
+                                    onClick={handleSave}
+                                    disabled={isSaving}
+                                >
+                                    {isSaving ? (
+                                        <>
+                                            <span className="loading-spinner"></span>
+                                            Saving World...
+                                        </>
+                                    ) : (
+                                        'Save World'
+                                    )}
                                 </button>
                                 <button className="menu-button" onClick={handleReset}>
                                     Reset World
@@ -175,9 +199,20 @@ export const Menu = () => {
                 </div>
             )}
             
-            <div id="save-confirmation" className="save-confirmation">
-                World saved successfully!
-            </div>
+            {notification.show && (
+                <div className={`notification ${notification.type} show`}>
+                    <div className="notification-content">
+                        <div className="notification-icon">
+                            {notification.type === 'success' && '✓'}
+                            {notification.type === 'warning' && '!'}
+                            {notification.type === 'error' && '✕'}
+                        </div>
+                        <div className="notification-message">
+                            {notification.message}
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };
