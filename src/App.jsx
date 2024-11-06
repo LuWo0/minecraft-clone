@@ -11,6 +11,7 @@ import { Menu } from "./components/Menu";
 import { DayNightCycle } from "./components/DayNightCycle";
 import { useAutoMusic } from "./hooks/useAutoMusic";
 import { useGameTime } from "./hooks/useGameTime";
+import { Rain } from './components/Rain';
 
 function App() {
   useAutoMusic();
@@ -31,6 +32,7 @@ function App() {
           turbidity={10}
         />
         <DayNightCycle />
+        <Rain />
         <FirstPersonView />
         <Physics>
           <Player />

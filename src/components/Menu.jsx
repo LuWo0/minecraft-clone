@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useStore } from '../hooks/useStore';
 import { useSound } from '../hooks/useSound';
 import { useGameTime } from '../hooks/useGameTime';
+import { useWeather } from '../hooks/useWeather';
 
 export const Menu = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -15,13 +16,20 @@ export const Menu = () => {
         musicVolume, 
         effectsVolume, 
         setMusicVolume, 
-        setEffectsVolume
+        setEffectsVolume,
+        isThunderEnabled,
+        toggleThunder
     } = useSound();
 
     const timeSpeed = useGameTime((state) => state.timeSpeed);
     const setTimeSpeed = useGameTime((state) => state.setTimeSpeed);
     const isPaused = useGameTime((state) => state.isPaused);
     const togglePause = useGameTime((state) => state.togglePause);
+
+    const isRaining = useWeather((state) => state.isRaining);
+    const rainIntensity = useWeather((state) => state.rainIntensity);
+    const toggleRain = useWeather((state) => state.toggleRain);
+    const setRainIntensity = useWeather((state) => state.setRainIntensity);
 
     useEffect(() => {
         const handleKeydown = (e) => {
@@ -204,6 +212,45 @@ export const Menu = () => {
                                         onChange={togglePause}
                                     />
                                 </div>
+                                <div className="setting-item checkbox">
+                                    <label>Rain</label>
+                                    <input 
+                                        type="checkbox"
+                                        checked={isRaining}
+                                        onChange={toggleRain}
+                                    />
+                                </div>
+                                {isRaining && (
+                                    <>
+                                        <div className="setting-item">
+                                            <label>Rain Intensity</label>
+                                            <input 
+                                                type="range" 
+                                                min="0" 
+                                                max="1" 
+                                                step="0.1"
+                                                value={rainIntensity}
+                                                onChange={(e) => {
+                                                    const value = parseFloat(e.target.value);
+                                                    setRainIntensity(value);
+                                                    e.target.style.background = `linear-gradient(to right, #4CAF50 0%, #4CAF50 ${value * 100}%, #1a1a1a ${value * 100}%, #1a1a1a 100%)`;
+                                                }}
+                                                style={{
+                                                    background: `linear-gradient(to right, #4CAF50 0%, #4CAF50 ${rainIntensity * 100}%, #1a1a1a ${rainIntensity * 100}%, #1a1a1a 100%)`
+                                                }}
+                                            />
+                                            <span>{Math.round(rainIntensity * 100)}%</span>
+                                        </div>
+                                        <div className="setting-item checkbox">
+                                            <label>Thunder</label>
+                                            <input 
+                                                type="checkbox"
+                                                checked={isThunderEnabled}
+                                                onChange={toggleThunder}
+                                            />
+                                        </div>
+                                    </>
+                                )}
                                 <button className="menu-button" onClick={handleClose}>
                                     Back to Game
                                 </button>
