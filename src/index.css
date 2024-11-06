@@ -290,6 +290,7 @@ body {
 
 .setting-item input[type="range"] {
     -webkit-appearance: none;
+    appearance: none;
     flex: 1;
     height: 8px;
     background: #1a1a1a;
