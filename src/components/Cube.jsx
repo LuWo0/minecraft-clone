@@ -24,6 +24,7 @@ export const Cube = ({position, texture}) => {
         
         if (event.altKey) {
             removeCube(x, y, z);
+            playSound("break");
             return;
         }
 

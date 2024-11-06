@@ -6,18 +6,31 @@ import grassPlaceSound from "../public/sounds/grass.mp3";
 import logPlaceSound from "../public/sounds/log.mp3";
 import woodPlaceSound from "../public/sounds/wood.mp3";
 
+// Break sound
+import breakSound from "../public/sounds/break.mp3";
+
+// Walk sound
+import walkSound from "../public/sounds/walk.mp3";
+
 const soundFiles = {
   bgMusic,
   dirtPlace: dirtPlaceSound,
   glassPlace: glassPlaceSound,
   grassPlace: grassPlaceSound,
   logPlace: logPlaceSound,
-  woodPlace: woodPlaceSound
+  woodPlace: woodPlaceSound,
+  break: breakSound,
+  walk: walkSound,
 };
 
 // Create a single background music instance
 const bgMusicAudio = new Audio(bgMusic);
 bgMusicAudio.loop = true;
+
+// Create separate audio instances for walking to allow overlapping
+const walkAudio1 = new Audio(walkSound);
+const walkAudio2 = new Audio(walkSound);
+let lastWalkSound = walkAudio1;
 
 export const useSound = create((set) => ({
   isMusicPlaying: false,
@@ -26,11 +39,22 @@ export const useSound = create((set) => ({
       console.error(`Sound ${soundName} not found`);
       return;
     }
+
+    if (soundName === "walk") {
+      lastWalkSound = lastWalkSound === walkAudio1 ? walkAudio2 : walkAudio1;
+      lastWalkSound.currentTime = 0;
+      lastWalkSound.volume = 0.3;
+      lastWalkSound.play().catch((err) => {
+        console.error("Error playing walk sound:", err.message);
+      });
+      return;
+    }
+
     // Create a new audio instance each time
     const sound = new Audio(soundFiles[soundName]);
     const playPromise = sound.play();
     if (playPromise) {
-      playPromise.catch(err => {
+      playPromise.catch((err) => {
         console.error(`Error playing ${soundName}:`, err.message);
       });
     }
@@ -41,8 +65,8 @@ export const useSound = create((set) => ({
       if (newIsPlaying) {
         const playPromise = bgMusicAudio.play();
         if (playPromise) {
-          playPromise.catch(err => {
-            console.error('Error playing background music:', err.message);
+          playPromise.catch((err) => {
+            console.error("Error playing background music:", err.message);
             set({ isMusicPlaying: false });
           });
         }
@@ -51,5 +75,5 @@ export const useSound = create((set) => ({
       }
       return { isMusicPlaying: newIsPlaying };
     });
-  }
+  },
 }));
