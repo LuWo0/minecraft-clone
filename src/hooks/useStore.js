@@ -8,6 +8,8 @@ const setLocalStorage = (key, value) =>
 export const useStore = create((set) => ({
   texture: "dirt",
   cubes: getLocalStorage("cubes") || [],
+  mouseSensitivity: 1.0,
+  showFPS: false,
 
   addCube: (x, y, z) => {
     set((prev) => ({
