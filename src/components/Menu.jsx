@@ -3,6 +3,7 @@ import { useStore } from '../hooks/useStore';
 import { useSound } from '../hooks/useSound';
 import { useGameTime } from '../hooks/useGameTime';
 import { useWeather } from '../hooks/useWeather';
+import { CONTROLS_CONFIG } from '../config/controls';
 
 export const Menu = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -139,7 +140,7 @@ export const Menu = () => {
 
                         {activeTab === 'controls' && (
                             <div className="controls-container">
-                                {controls.map((section) => (
+                                {CONTROLS_CONFIG.map((section) => (
                                     <div key={section.category} className="control-section">
                                         <h3 className="control-category">{section.category}</h3>
                                         <div className="control-list">
