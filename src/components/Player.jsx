@@ -5,8 +5,8 @@ import { Vector3 } from "three";
 import { useKeyboard } from "../hooks/useKeyboard";
 import { useSound } from "../hooks/useSound";
 
-const JUMP_FORCE = 4;
-const SPEED = 4;
+const JUMP_FORCE = 5.1;
+const SPEED = 4.1;
 
 export const Player = () => {
   const { moveBackward, moveForward, moveLeft, moveRight, jump } =
@@ -16,6 +16,8 @@ export const Player = () => {
 
   const { playSound } = useSound();
 
+
+  // Pill shape 
   const [ref, api] = useCylinder(() => ({
     mass: 1,
     type: "Dynamic",
