@@ -1,11 +1,11 @@
 import { useFrame, useThree } from "@react-three/fiber";
-import { useSphere } from "@react-three/cannon";
+import { useCylinder } from "@react-three/cannon";
 import { useEffect, useRef } from "react";
 import { Vector3 } from "three";
 import { useKeyboard } from "../hooks/useKeyboard";
 import { useSound } from "../hooks/useSound";
 
-const JUMP_FORCE = 3;
+const JUMP_FORCE = 4;
 const SPEED = 4;
 
 export const Player = () => {
@@ -16,10 +16,19 @@ export const Player = () => {
 
   const { playSound } = useSound();
 
-  const [ref, api] = useSphere(() => ({
+  const [ref, api] = useCylinder(() => ({
     mass: 1,
     type: "Dynamic",
     position: [0, 1, 10],
+    args: [0.5, 0.5, 1.8, 16],
+    fixedRotation: true,
+    friction: 0,
+    linearDamping: 0.5,
+    angularDamping: 0.5,
+    material: {
+      friction: 0,
+      restitution: 0.1
+    },
   }));
 
   // setting up a reference to the velocity that subscribes to the velocity of the sphere

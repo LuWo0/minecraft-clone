@@ -8,6 +8,10 @@ export const Ground = () => {
     const [ref] = usePlane(() => ({
         rotation: [-Math.PI / 2,0,0], //rotating 90 deg, flattening the ground 
         position: [0, -0.5, 0],
+        material: {
+            friction: 0,
+            restitution: 0
+        }
     }));
 
     const addCube = useStore((state) => state.addCube);

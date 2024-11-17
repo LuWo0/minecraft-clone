@@ -9,7 +9,13 @@ export const Cube = ({position, texture}) => {
     const [isHovered, setIsHovered] = useState(false);
     const [ref] = useBox(() => ({
         type: "Static",
-        position
+        position,
+        friction: 0,
+        linearDamping: 0.999, 
+        material: {
+            friction: 0,
+            restitution: 0.1
+        }
     }));
 
     const { playSound } = useSound();
